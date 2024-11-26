@@ -1,6 +1,41 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+//! importar la funcion
+import { obtenerclima } from "../helpers/obtener-clima";
+//!CSS
+import "../css/navbar.css";
 
 function NavBar() {
+  //!manejar los datos del tiempo
+  const [tiempo, setTiempo] = useState(null);
+  // console.log(tiempo);
+
+  //!manejar CUANDO se desata la funcion del clima
+  useEffect(() => {
+    //funcion
+    clima();
+  }, []);
+
+  const clima = () => {
+    navigator.geolocation.getCurrentPosition((pos) => {
+      const coords = pos.coords;
+      const lat = coords.latitude;
+      const long = coords.longitude;
+
+      obtenerclima(lat, long)
+        .then((respuesta) => {
+          //! DESESTRUCTURAR
+          const { main, weather } = respuesta;
+
+          setTiempo({
+            temp: main.temp,
+            clima: weather[0],
+          });
+          console.log(respuesta);
+        })
+        .catch((error) => console.log(error));
+    });
+  };
+
   return (
     <>
       <nav className="navbar navbar-expand-lg bg-light">
@@ -33,6 +68,16 @@ function NavBar() {
                 </a>
               </li>
             </ul>
+            {tiempo && (
+              <div className="d-flex align-items-center justify-content-center gap-2">
+                <img
+                  src={`https://openweathermap.org/img/wn/${tiempo.clima.icon}@2x.png`}
+                  alt="datos del clima"
+                  className="icon-tiempo"
+                />
+                <span>{Math.round(tiempo.temp)}°C</span>
+              </div>
+            )}
           </div>
         </div>
       </nav>
