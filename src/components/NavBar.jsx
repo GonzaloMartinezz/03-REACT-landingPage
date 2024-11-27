@@ -4,7 +4,7 @@ import { obtenerclima } from "../helpers/obtener-clima";
 //!CSS
 import "../css/navbar.css";
 
-function NavBar() {
+function NavBar({ darkMode, cambiarModoOscuro }) {
   //!manejar los datos del tiempo
   const [tiempo, setTiempo] = useState(null);
   // console.log(tiempo);
@@ -38,7 +38,11 @@ function NavBar() {
 
   return (
     <>
-      <nav className="navbar navbar-expand-lg bg-light">
+      <nav
+        className={`navbar navbar-expand-lg ${
+          darkMode ? "bg-dark navbar-dark" : "bg-light"
+        }`}
+      >
         <div className="container-fluid">
           <a className="navbar-brand" href="#">
             <i className="fa fa-ravelry" aria-hidden="true"></i>
@@ -68,6 +72,8 @@ function NavBar() {
                 </a>
               </li>
             </ul>
+
+            {/*//! TIEMPO */}
             {tiempo && (
               <div className="d-flex align-items-center justify-content-center gap-2">
                 <img
@@ -75,9 +81,30 @@ function NavBar() {
                   alt="datos del clima"
                   className="icon-tiempo"
                 />
-                <span>{Math.round(tiempo.temp)}°C</span>
+                <span className={darkMode ? "text-white" : " "}>
+                  {Math.round(tiempo.temp)}°C
+                </span>
               </div>
             )}
+
+            {/*//! MODO OSCURO */}
+            <div className="d-flex align-items-center justify-content-center gap-2">
+              {darkMode ? (
+                <i className="fa fa-moon-o text-white" aria-hidden="true"></i>
+              ) : (
+                <i className="fa fa-sun-o" aria-hidden="true"></i>
+              )}
+
+              <div className="form-check form-switch">
+                <input
+                  className="form-check-input"
+                  type="checkbox"
+                  role="switch"
+                  id="flexSwitchCheckDefault"
+                  onChange={cambiarModoOscuro}
+                />
+              </div>
+            </div>
           </div>
         </div>
       </nav>
