@@ -1,4 +1,3 @@
-// import "./App.css";
 import { useState } from "react";
 import { detalleCard } from "./data/info.js";
 import CardApp from "./components/CardApp";
